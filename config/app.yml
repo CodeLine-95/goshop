@@ -1,0 +1,14 @@
+# 服务器运行配置项
+server:
+  port: 9000
+
+# mysql配置项
+db:
+  driver: mysql
+  host: 8.140.156.63
+  port: 3306
+  user: goshop
+  pass: DcDe6CMx6FjMFfLa
+  dbname: goshop
+  charset: utf8mb4
+  loc: Asia/Shanghai
