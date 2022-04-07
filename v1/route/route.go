@@ -12,6 +12,7 @@ func Routers(r *gin.Engine) {
 		authGroup := Api_v1.Group("/account")
 		{
 			authGroup.POST("/resgister", controller.Register)
+			authGroup.POST("/login", controller.Login)
 		}
 	}
 }

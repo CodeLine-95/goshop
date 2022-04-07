@@ -1,14 +1,15 @@
 # 服务器运行配置项
 server:
   port: 9000
+  jwtKey: HORL)JUZ&AFIW*(XGS
 
 # mysql配置项
 db:
   driver: mysql
-  host: 127.0.0.1
+  host: 8.140.156.63
   port: 3306
-  user: <use yourself>
-  pass: <use yourself>
-  dbname: <use yourself>
+  user: goshop
+  pass: DcDe6CMx6FjMFfLa
+  dbname: goshop
   charset: utf8mb4
   loc: Asia/Shanghai

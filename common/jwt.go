@@ -1,12 +1,14 @@
 package common
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
+	"github.com/spf13/viper"
 	"goshop/model"
+	"goshop/utils"
 	"time"
 )
 
-var jwtKey = []byte("job_hand_some")
+var jwtKey = []byte(viper.GetString("server.jwtKey"))
 
 type Claims struct {
 	UserId uint
@@ -15,17 +17,18 @@ type Claims struct {
 
 // 生成jwt token
 func ReleaseToken(user model.User) (string, error) {
+	ip, _ := utils.ExternalIp()
 	expirTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{
 		UserId: user.ID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirTime.Unix(),
 			IssuedAt:  time.Now().Unix(),
-			Issuer:    "jobhandsome.tech",
-			Subject:   "user token",
+			Issuer:    ip.String(),
+			Subject:   "token",
 		},
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
 		return "", err

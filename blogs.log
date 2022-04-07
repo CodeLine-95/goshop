@@ -5,7 +5,8 @@
  - using code:	gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] POST   /v1/account/resgister     --> goshop/v1/controller.Register (3 handlers)
+[GIN-debug] POST   /v1/account/login         --> goshop/v1/controller.Login (3 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :9000
-[GIN] 2022/04/05 - 21:52:05 | 200 |   130.00275ms |       127.0.0.1 | POST     "/v1/account/resgister"
+[GIN] 2022/04/07 - 16:12:06 | 200 |    137.0605ms |       127.0.0.1 | POST     "/v1/account/login"

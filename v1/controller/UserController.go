@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -56,4 +57,49 @@ func Register(ctx *gin.Context) {
 	//返回结果
 
 	utils.Success(ctx, "注册成功", nil)
+}
+
+// 登录
+func Login(ctx *gin.Context) {
+	DB := common.GetDB()
+	// 获取参数
+	username := ctx.PostForm("username")
+	password := ctx.PostForm("password")
+	// 表单验证
+	if len(username) == 0 {
+		utils.Response(ctx, http.StatusBadRequest, 400, "用户名不能为空", nil)
+		return
+	}
+	if len(password) == 0 {
+		utils.Response(ctx, http.StatusBadRequest, 400, "密码不能为空", nil)
+		return
+	}
+	// 验证用户密码
+	var user model.User
+	DB.Where("username = ?", username).First(&user)
+	if user.ID == 0 {
+		utils.Response(ctx, http.StatusBadRequest, 400, "该用户未注册", nil)
+		return
+	}
+	// 验证密码
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		utils.Response(ctx, http.StatusBadRequest, 400, "密码错误", nil)
+		return
+	}
+	// 生成token
+	token, err := common.ReleaseToken(user)
+	if err != nil {
+		fmt.Println(err)
+		utils.Response(ctx, http.StatusBadRequest, 400, "生成token失败", nil)
+		return
+	}
+	// 获取 本机真实IP
+	ip, _ := utils.ExternalIp()
+	// 更新user
+	DB.Model(&model.User{}).Where("id = ?", user.ID).Update("loginip", ip.String())
+	// 返回值
+	utils.Success(ctx, "登录成功", gin.H{
+		token: token,
+	})
 }
