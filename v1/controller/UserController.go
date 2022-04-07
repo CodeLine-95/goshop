@@ -112,5 +112,5 @@ func UserInfo(ctx *gin.Context) {
 	UserResultData["email"] = user.(model.User).Email
 	UserResultData["loginip"] = user.(model.User).Loginip
 	// 返回值
-	utils.Success(ctx, "登录成功", UserResultData)
+	utils.Success(ctx, "获取成功", UserResultData)
 }
