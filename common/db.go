@@ -24,7 +24,10 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		fmt.Println("fail to connect database, err: " + err.Error())
 	}
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.User{}) // 自动创建数据表
+	db.SingularTable(true)        // 支持单数创建数据表
+	db.DB().SetMaxIdleConns(10)   // 用于设置闲置的连接数
+	db.DB().SetMaxOpenConns(100)  // 用于设置最大打开的连接数，默认值为0表示不限制
 	DB = db
 	return db
 }
