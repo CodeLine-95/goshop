@@ -44,7 +44,7 @@ go mod tidy
 5.  运行项目
 
 ```
-go run maim.go
+go run main.go
 ```
 
 
