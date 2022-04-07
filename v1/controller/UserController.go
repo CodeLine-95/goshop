@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -90,7 +89,6 @@ func Login(ctx *gin.Context) {
 	// 生成token
 	token, err := common.ReleaseToken(user)
 	if err != nil {
-		fmt.Println(err)
 		utils.Response(ctx, http.StatusBadRequest, 400, "生成token失败", nil)
 		return
 	}
@@ -100,6 +98,19 @@ func Login(ctx *gin.Context) {
 	DB.Model(&model.User{}).Where("id = ?", user.ID).Update("loginip", ip.String())
 	// 返回值
 	utils.Success(ctx, "登录成功", gin.H{
-		token: token,
+		"token": token,
 	})
+}
+
+// 获取用户信息
+func UserInfo(ctx *gin.Context) {
+	user, _ := ctx.Get("user")
+	UserResultData := make(map[string]interface{})
+	UserResultData["username"] = user.(model.User).Username
+	UserResultData["usernick"] = user.(model.User).Usernick
+	UserResultData["phone"] = user.(model.User).Phone
+	UserResultData["email"] = user.(model.User).Email
+	UserResultData["loginip"] = user.(model.User).Loginip
+	// 返回值
+	utils.Success(ctx, "登录成功", UserResultData)
 }
