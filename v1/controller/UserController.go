@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
-	"goshop/common"
+	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
 	"net/http"
@@ -12,7 +12,7 @@ import (
 
 //判断手机号是否存在
 func isPhoneExist(db *gorm.DB, phone string) bool {
-	var user model.User
+	var user model.Users
 	db.Where("phone = ?", phone).First(&user)
 	if user.ID != 0 {
 		return true
@@ -22,7 +22,7 @@ func isPhoneExist(db *gorm.DB, phone string) bool {
 
 // 注册
 func Register(ctx *gin.Context) {
-	DB := common.GetDB()
+	DB := config.GetDB()
 	// 获取参数
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
@@ -47,7 +47,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	user := model.User{
+	user := model.Users{
 		Username: username,
 		Usernick: usernick,
 		Password: string(hashPassword),
@@ -60,7 +60,7 @@ func Register(ctx *gin.Context) {
 
 // 登录
 func Login(ctx *gin.Context) {
-	DB := common.GetDB()
+	DB := config.GetDB()
 	// 获取参数
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
@@ -74,7 +74,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 验证用户密码
-	var user model.User
+	var user model.Users
 	DB.Where("username = ?", username).First(&user)
 	if user.ID == 0 {
 		utils.Response(ctx, http.StatusBadRequest, 400, "该用户未注册", nil)
@@ -87,7 +87,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 生成token
-	token, err := common.ReleaseToken(user)
+	token, err := config.ReleaseToken(user)
 	if err != nil {
 		utils.Response(ctx, http.StatusBadRequest, 400, "生成token失败", nil)
 		return
@@ -95,7 +95,7 @@ func Login(ctx *gin.Context) {
 	// 获取 本机真实IP
 	ip, _ := utils.ExternalIp()
 	// 更新user
-	DB.Model(&model.User{}).Where("id = ?", user.ID).Update("loginip", ip.String())
+	DB.Model(&model.Users{}).Where("id = ?", user.ID).Update("loginip", ip.String())
 	// 返回值
 	utils.Success(ctx, "登录成功", gin.H{
 		"token": token,
@@ -106,11 +106,11 @@ func Login(ctx *gin.Context) {
 func UserInfo(ctx *gin.Context) {
 	user, _ := ctx.Get("user")
 	UserResultData := make(map[string]interface{})
-	UserResultData["username"] = user.(model.User).Username
-	UserResultData["usernick"] = user.(model.User).Usernick
-	UserResultData["phone"] = user.(model.User).Phone
-	UserResultData["email"] = user.(model.User).Email
-	UserResultData["loginip"] = user.(model.User).Loginip
+	UserResultData["username"] = user.(model.Users).Username
+	UserResultData["usernick"] = user.(model.Users).Usernick
+	UserResultData["phone"] = user.(model.Users).Phone
+	UserResultData["email"] = user.(model.Users).Email
+	UserResultData["loginip"] = user.(model.Users).Loginip
 	// 返回值
 	utils.Success(ctx, "获取成功", UserResultData)
 }

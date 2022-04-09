@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"goshop/common"
+	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
 	"net/http"
@@ -20,7 +20,7 @@ func CheckToken() gin.HandlerFunc {
 			return
 		}
 		// token验证是否失效
-		token, claims, err := common.ParseToken(tokenString)
+		token, claims, err := config.ParseToken(tokenString)
 		if err != nil || !token.Valid {
 			utils.Response(ctx, http.StatusUnauthorized, 401, "权限不足", nil)
 			ctx.Abort()
@@ -28,8 +28,8 @@ func CheckToken() gin.HandlerFunc {
 		}
 		//通过验证后获取claims中的userID
 		userId := claims.UserId
-		DB := common.GetDB()
-		var user model.User
+		DB := config.GetDB()
+		var user model.Users
 		DB.First(&user, userId)
 		//检查用户是否存在
 		if user.ID == 0 {

@@ -1,14 +1,16 @@
-package common
+package config
 
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 	"goshop/model"
+	"goshop/utils/logger"
 	"net/url"
 )
 
-var DB *gorm.DB // 全局db句柄
+var DB *gorm.DB
+
 // 初始化db
 func InitDB() *gorm.DB {
 	driver := viper.GetString("db.driver")
@@ -21,13 +23,14 @@ func InitDB() *gorm.DB {
 	loc := viper.GetString("db.loc")
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s", user, pass, host, port, dbname, charset, url.QueryEscape(loc))
 	db, err := gorm.Open(driver, args)
+	logger.Info("连接Mysql 成功", "mysql connect")
 	if err != nil {
-		fmt.Println("fail to connect database, err: " + err.Error())
+		logger.PanicError(err, "链接数据库错误", true)
 	}
-	db.AutoMigrate(&model.User{}) // 自动创建数据表
-	db.SingularTable(true)        // 支持单数创建数据表
-	db.DB().SetMaxIdleConns(10)   // 用于设置闲置的连接数
-	db.DB().SetMaxOpenConns(100)  // 用于设置最大打开的连接数，默认值为0表示不限制
+	db.AutoMigrate(&model.Users{}) // 自动创建数据表
+	db.SingularTable(true)         // 支持单数创建数据表
+	db.DB().SetMaxIdleConns(10)    // 用于设置闲置的连接数
+	db.DB().SetMaxOpenConns(100)   // 用于设置最大打开的连接数，默认值为0表示不限制
 	DB = db
 	return db
 }

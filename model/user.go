@@ -2,7 +2,7 @@ package model
 
 import "github.com/jinzhu/gorm"
 
-type User struct {
+type Users struct {
 	gorm.Model
 	Username string `gorm:"type:varchar(20);not null"`        // 用户名
 	Usernick string `gorm:"type:varchar(50);not null"`        // 昵称

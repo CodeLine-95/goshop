@@ -1,4 +1,4 @@
-package common
+package config
 
 import (
 	"github.com/golang-jwt/jwt"
@@ -16,7 +16,7 @@ type Claims struct {
 }
 
 // 生成jwt token
-func ReleaseToken(user model.User) (string, error) {
+func ReleaseToken(user model.Users) (string, error) {
 	ip, _ := utils.ExternalIp()
 	expirTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{

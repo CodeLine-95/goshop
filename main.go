@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
-	"goshop/common"
+	"goshop/config"
 	"goshop/routes"
+	"goshop/utils/logger"
 	"goshop/v1/route"
 	"os"
 )
@@ -15,10 +15,10 @@ func initConfig() {
 	workDir, _ := os.Getwd()
 	viper.SetConfigName("app")
 	viper.SetConfigType("yml")
-	viper.AddConfigPath(workDir + "/config")
+	viper.AddConfigPath(workDir)
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("Failed to load configuration file")
+		logger.PanicError(err, "读取YML配置", true)
 	}
 }
 
@@ -32,19 +32,20 @@ func initGin() {
 	if port != "" {
 		err := r.Run(":" + port)
 		if err != nil {
-			fmt.Println("Service startup failed ！err: %v \n", err)
+			logger.PanicError(err, "Service startup failed！", true)
 		}
 	}
 
 	err := r.Run()
 	if err != nil {
-		fmt.Println("Service startup failed ! err: %v \n", err)
+		logger.PanicError(err, "Service startup failed！", true)
 	}
 }
 
 func main() {
 	initConfig()          // 初始化配置
-	db := common.InitDB() // 初始化数据库
+	db := config.InitDB() // 初始化数据库
 	defer db.Close()
 	initGin() //初始化Gin框架并启动
+	config.InitCasbin()
 }
