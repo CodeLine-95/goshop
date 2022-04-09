@@ -6,10 +6,10 @@ server:
 # mysql配置项
 db:
   driver: mysql
-  host: <my self host>
+  host: 8.140.156.63
   port: 3306
-  user: <my self user>
-  pass: <my self pass>
-  dbname: <my self dbname>
+  user: goshop
+  pass: DcDe6CMx6FjMFfLa
+  dbname: goshop
   charset: utf8mb4
   loc: Asia/Shanghai

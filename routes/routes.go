@@ -20,7 +20,7 @@ func Init() *gin.Engine {
 	// 初始化日志
 	gin.DisableConsoleColor()
 	// 创建日志文件
-	f, _ := os.Create("blogs.log")
+	f, _ := os.Create("goshop.log")
 	// 写入日志
 	gin.DefaultWriter = io.MultiWriter(f)
 	// 创建一个默认路由
