@@ -6,7 +6,6 @@ import (
 	"goshop/config"
 	"goshop/routes"
 	"goshop/utils/logger"
-	"goshop/v1/route"
 	"os"
 )
 
@@ -23,8 +22,6 @@ func initConfig() {
 }
 
 func initGin() {
-	// 加载多路由
-	routes.Include(route.Routers)
 	// 初始化gin框架
 	r := routes.Init()
 	// 读取yml配置文件

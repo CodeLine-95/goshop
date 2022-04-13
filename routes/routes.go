@@ -2,6 +2,8 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	api_v1 "goshop/api/v1/route"
+	app_v1 "goshop/app/v1/route"
 	"io"
 	"os"
 )
@@ -17,6 +19,9 @@ func Include(opts ...Option) {
 
 // 初始化
 func Init() *gin.Engine {
+	// 加载多路由
+	Include(app_v1.Routers)
+	Include(api_v1.Routers)
 	// 初始化日志
 	gin.DisableConsoleColor()
 	// 创建日志文件
