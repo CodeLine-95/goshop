@@ -24,7 +24,7 @@ func Fail(ctx *gin.Context, msg string, data gin.H) {
 // 获取全部请求参数
 func DataMapByRequest(ctx *gin.Context) (dataMap map[string]string, err error) {
 	//必须先解析Form
-	ctx.Request.ParseForm()
+	err = ctx.Request.ParseForm()
 	dataMap = make(map[string]string)
 	//说明:须post方法,加: 'Content-Type': 'application/x-www-form-urlencoded'
 	for key, _ := range ctx.Request.PostForm {
