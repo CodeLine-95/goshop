@@ -1,5 +1,5 @@
 # goshop
-![基于go开发的综合商城系统](goshop.png)
+![基于go开发的综合商城系统](server/goshop.png)
 ### 基于go开发的综合商城系统api
 
 #### 软件架构
