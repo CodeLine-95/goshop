@@ -38,9 +38,10 @@ brew install go
 git clone https://gitee.com/jobhandsome/goshop.git
 ```
 
-4.  进入目录初始化mod
+4.  进入server目录初始化mod
 
 ```
+cd server
 go mod init goshop
 go mod tidy
 ```
