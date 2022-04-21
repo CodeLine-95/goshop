@@ -44,8 +44,16 @@ cd server
 go mod init goshop
 go mod tidy
 ```
-5.  运行项目
+5.  运行server项目
 
 ```
 go run main.go
+```
+
+6. 运行web项目
+
+```
+cd web
+yarn dev
+
 ```
