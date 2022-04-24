@@ -26,9 +26,9 @@ func Register(ctx *gin.Context) {
 	DB := config.GetDB()
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	username := params["username"]
-	password := params["password"]
-	usernick := params["usernick"]
+	username := params["username"].(string)
+	password := params["password"].(string)
+	usernick := params["usernick"].(string)
 
 	if len(password) < 6 {
 		utils.Response(ctx, http.StatusUnprocessableEntity, 422, "密码不能小于6位！", nil)
@@ -65,8 +65,8 @@ func Login(ctx *gin.Context) {
 	DB := config.GetDB()
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	username := params["username"]
-	password := params["password"]
+	username := params["username"].(string)
+	password := params["password"].(string)
 	// 表单验证
 	if len(username) == 0 {
 		utils.Response(ctx, http.StatusBadRequest, 400, "用户名不能为空", nil)

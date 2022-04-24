@@ -9,11 +9,12 @@ import (
 
 // 获取商品列表信息
 func GetGoodsList(ctx *gin.Context) {
+	DB := config.InitDB()
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
 	// 查询数据
 	var goods model.Goods
-	GoodResult := goods.FindAll(ctx, params)
+	GoodResult := goods.FindAll(ctx, DB, params)
 	// struct 转 map  (反射 reflect包)
 	//data := make(map[string]interface{})
 	//elem := reflect.ValueOf(&goods).Elem()

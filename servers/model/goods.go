@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/gin-gonic/gin"
-	"goshop/config"
+	"github.com/jinzhu/gorm"
 	"goshop/utils/Paginate"
 )
 
@@ -27,8 +27,7 @@ func (Goods) TableName() string {
 	return "goods"
 }
 
-func (Goods) FindAll(ctx *gin.Context, params map[string]interface{}) []Goods {
-	DB := config.InitDB()
+func (Goods) FindAll(ctx *gin.Context, DB *gorm.DB, params map[string]interface{}) []Goods {
 	var GoodResult []Goods
 	DB.Scopes(Paginate.Paginate(ctx)).Where(params).Order("created_at desc").Find(&GoodResult)
 	return GoodResult

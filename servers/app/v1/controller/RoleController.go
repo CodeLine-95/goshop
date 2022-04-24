@@ -5,22 +5,21 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
-	"strconv"
 )
 
 // 创建角色
 func AddRole(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
-	ParentID, _ := strconv.Atoi(params["ParentID"])
-	Sort, _ := strconv.Atoi(params["Sort"])
-	Status, _ := strconv.Atoi(params["Status"])
+	ParentID, _ := params["ParentID"].(uint)
+	Sort, _ := params["Sort"].(uint)
+	Status, _ := params["Status"].(uint)
 	role := model.Role{
-		Name:     params["Name"],
-		Alias:    params["Alias"],
-		ParentID: uint(ParentID),
-		Sort:     uint(Sort),
-		Remark:   params["Remark"],
-		Status:   uint(Status),
+		Name:     params["Name"].(string),
+		Alias:    params["Alias"].(string),
+		ParentID: ParentID,
+		Sort:     Sort,
+		Remark:   params["Remark"].(string),
+		Status:   Status,
 	}
 
 	// 获取数据库句柄
