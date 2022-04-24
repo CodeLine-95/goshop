@@ -31,6 +31,8 @@ func Routers(r *gin.Engine) {
 				{
 					goodsGroup.GET("/get-list", controller.GetGoodsList)
 					goodsGroup.POST("/add", controller.AddGoods)
+					goodsGroup.PUT("/edit", controller.EditGoods)
+					goodsGroup.PUT("/is-uper-lower", controller.IsUperOrLower)
 				}
 			}
 

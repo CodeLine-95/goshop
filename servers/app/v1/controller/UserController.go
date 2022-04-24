@@ -10,7 +10,7 @@ import (
 func UserInfo(ctx *gin.Context) {
 	user, _ := ctx.Get("user")
 	UserResultData := make(map[string]interface{})
-	userModel := user.(model.Users)
+	userModel := user.(model.Admin)
 	UserResultData["username"] = userModel.Username
 	UserResultData["usernick"] = userModel.Usernick
 	UserResultData["phone"] = userModel.Phone

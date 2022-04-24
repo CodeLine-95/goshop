@@ -7,12 +7,13 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
+	"goshop/utils/time"
 	"net/http"
 )
 
 //判断手机号是否存在
 func isPhoneExist(db *gorm.DB, phone string) bool {
-	var user model.Users
+	var user model.Admin
 	db.Where("phone = ?", phone).First(&user)
 	if user.ID != 0 {
 		return true
@@ -48,7 +49,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	user := model.Users{
+	user := model.Admin{
 		Username: username,
 		Usernick: usernick,
 		Password: string(hashPassword),
@@ -76,7 +77,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 验证用户密码
-	var user model.Users
+	var user model.Admin
 	DB.Where("username = ?", username).First(&user)
 	if user.ID == 0 {
 		utils.Response(ctx, http.StatusBadRequest, 400, "该用户未注册", nil)
@@ -97,7 +98,11 @@ func Login(ctx *gin.Context) {
 	// 获取 本机真实IP
 	ip, _ := utils.ExternalIp()
 	// 更新user
-	DB.Model(&model.Users{}).Where("id = ?", user.ID).Update("loginip", ip.String())
+	var LocalTime time.LocalTime
+	updateData := make(map[string]interface{})
+	updateData["loginip"] = ip.String()
+	updateData["login_at"] = LocalTime.String()
+	DB.Model(&model.Admin{}).Where("id = ?", user.ID).Update(updateData)
 	// 返回值
 	utils.Success(ctx, "登录成功", gin.H{
 		"token": token,
