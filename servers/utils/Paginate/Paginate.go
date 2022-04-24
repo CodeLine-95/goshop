@@ -12,7 +12,6 @@ func Paginate(ctx *gin.Context) func(db *gorm.DB) *gorm.DB {
 		if page == 0 {
 			page = 1
 		}
-
 		pageSize, _ := strconv.Atoi(ctx.Query("pageSize"))
 		switch {
 		case pageSize > 100:
@@ -20,7 +19,6 @@ func Paginate(ctx *gin.Context) func(db *gorm.DB) *gorm.DB {
 		case pageSize <= 0:
 			pageSize = 10
 		}
-
 		offset := (page - 1) * pageSize
 		return db.Offset(offset).Limit(pageSize)
 	}

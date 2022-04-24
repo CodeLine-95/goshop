@@ -5,20 +5,15 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
-	"goshop/utils/Paginate"
-	"strconv"
 )
 
 // 获取商品列表信息
 func GetGoodsList(ctx *gin.Context) {
-	DB := config.InitDB()
-
 	// 获取参数
-	//params, _ := utils.DataMapByRequest(ctx)
+	params, _ := utils.DataMapByRequest(ctx)
 	// 查询数据
 	var goods model.Goods
-	var GoodResult []model.GoodResult
-	DB.Table(goods.TableName()).Scopes(Paginate.Paginate(ctx)).Order("created_at desc").Find(&GoodResult)
+	GoodResult := goods.FindAll(ctx, params)
 	// struct 转 map  (反射 reflect包)
 	//data := make(map[string]interface{})
 	//elem := reflect.ValueOf(&goods).Elem()
@@ -37,23 +32,23 @@ func GetGoodsList(ctx *gin.Context) {
 func AddGoods(ctx *gin.Context) {
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	GoodsCate, _ := strconv.ParseUint(params["GoodsCate"], 0, 64)
-	UnitPrice, _ := strconv.ParseFloat(params["UnitPrice"], 64)
-	FavorablePrice, _ := strconv.ParseFloat(params["FavorablePrice"], 64)
-	GoodsStock, _ := strconv.ParseUint(params["GoodsStock"], 0, 64)
-	GoodsStatus, _ := strconv.ParseUint(params["GoodsStatus"], 0, 64)
+	GoodsCate, _ := params["GoodsCate"].(uint64)
+	UnitPrice, _ := params["UnitPrice"].(float64)
+	FavorablePrice, _ := params["FavorablePrice"].(float64)
+	GoodsStock, _ := params["GoodsStock"].(uint64)
+	GoodsStatus, _ := params["GoodsStatus"].(uint64)
 	// 拼装数据
 	goods := model.Goods{
 		GoodsCate:      GoodsCate,
-		GoodsName:      params["GoodsName"],
-		GoodsProperty:  params["GoodsProperty"],
-		GoodsDesc:      params["GoodsDesc"],
-		GoodsContent:   params["GoodsContent"],
+		GoodsName:      params["GoodsName"].(string),
+		GoodsProperty:  params["GoodsProperty"].(string),
+		GoodsDesc:      params["GoodsDesc"].(string),
+		GoodsContent:   params["GoodsContent"].(string),
 		UnitPrice:      UnitPrice,
 		FavorablePrice: FavorablePrice,
 		GoodsStock:     GoodsStock,
-		GoodsCover:     params["GoodsCover"],
-		GoodsSlides:    params["GoodsSlides"],
+		GoodsCover:     params["GoodsCover"].(string),
+		GoodsSlides:    params["GoodsSlides"].(string),
 		GoodsStatus:    GoodsStatus,
 	}
 	// 获取数据库句柄
@@ -72,28 +67,28 @@ func AddGoods(ctx *gin.Context) {
 func EditGoods(ctx *gin.Context) {
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	int_id, _ := strconv.Atoi(params["id"])
-	GoodsCate, _ := strconv.ParseUint(params["GoodsCate"], 0, 64)
-	UnitPrice, _ := strconv.ParseFloat(params["UnitPrice"], 64)
-	FavorablePrice, _ := strconv.ParseFloat(params["FavorablePrice"], 64)
-	GoodsStock, _ := strconv.ParseUint(params["GoodsStock"], 0, 64)
-	GoodsStatus, _ := strconv.ParseUint(params["GoodsStatus"], 0, 64)
+	int_id, _ := params["id"].(uint)
+	GoodsCate, _ := params["GoodsCate"].(uint64)
+	UnitPrice, _ := params["UnitPrice"].(float64)
+	FavorablePrice, _ := params["FavorablePrice"].(float64)
+	GoodsStock, _ := params["GoodsStock"].(uint64)
+	GoodsStatus, _ := params["GoodsStatus"].(uint64)
 	// 获取数据库句柄
 	DB := config.GetDB()
 	var goods model.Goods
 	// 查询当前数据
-	DB.First(&goods, uint(int_id))
+	DB.First(&goods, int_id)
 	// 更新数据
 	goods.GoodsCate = GoodsCate
-	goods.GoodsName = params["GoodsName"]
-	goods.GoodsProperty = params["GoodsProperty"]
-	goods.GoodsDesc = params["GoodsDesc"]
-	goods.GoodsContent = params["GoodsContent"]
+	goods.GoodsName = params["GoodsName"].(string)
+	goods.GoodsProperty = params["GoodsProperty"].(string)
+	goods.GoodsDesc = params["GoodsDesc"].(string)
+	goods.GoodsContent = params["GoodsContent"].(string)
 	goods.UnitPrice = UnitPrice
 	goods.FavorablePrice = FavorablePrice
 	goods.GoodsStock = GoodsStock
-	goods.GoodsCover = params["GoodsCover"]
-	goods.GoodsSlides = params["GoodsSlides"]
+	goods.GoodsCover = params["GoodsCover"].(string)
+	goods.GoodsSlides = params["GoodsSlides"].(string)
 	goods.GoodsStatus = GoodsStatus
 	result := DB.Save(&goods)
 	// 返回值
@@ -108,13 +103,13 @@ func EditGoods(ctx *gin.Context) {
 func IsUperOrLower(ctx *gin.Context) {
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	int_id, _ := strconv.Atoi(params["id"])
-	GoodsStatus, _ := strconv.ParseUint(params["GoodsStatus"], 0, 64)
+	int_id, _ := params["id"].(uint)
+	GoodsStatus, _ := params["GoodsStatus"].(uint64)
 	// 获取数据库句柄
 	DB := config.GetDB()
 	var goods model.Goods
 	// 查询当前数据
-	DB.First(&goods, uint(int_id))
+	DB.First(&goods, int_id)
 	goods.GoodsStatus = GoodsStatus
 	result := DB.Save(&goods)
 	// 返回值

@@ -22,10 +22,10 @@ func Fail(ctx *gin.Context, msg string, data any) {
 }
 
 // 获取全部请求参数
-func DataMapByRequest(ctx *gin.Context) (dataMap map[string]string, err error) {
+func DataMapByRequest(ctx *gin.Context) (dataMap map[string]interface{}, err error) {
 	//必须先解析Form
 	err = ctx.Request.ParseForm()
-	dataMap = make(map[string]string)
+	dataMap = make(map[string]interface{})
 	//说明:须post方法,加: 'Content-Type': 'application/x-www-form-urlencoded'
 	for key, _ := range ctx.Request.PostForm {
 		dataMap[key] = ctx.PostForm(key)
