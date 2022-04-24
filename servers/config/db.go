@@ -27,14 +27,14 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		logger.PanicError(err, "链接数据库错误", true)
 	}
-	db.AutoMigrate(&model.Users{})    // 自动创建 User 表
+	db.AutoMigrate(&model.Admin{})    // 自动创建 User 表
 	db.AutoMigrate(&model.Role{})     // 自动创建 Role 表
 	db.AutoMigrate(&model.Menu{})     // 自动创建 Menu 表
 	db.AutoMigrate(&model.RoleMenu{}) // 自动创建 RoleMenu 表
 	db.AutoMigrate(&model.Goods{})    // 自动创建 Goods 表
-	db.SingularTable(true)            // 支持单数创建数据表
-	db.DB().SetMaxIdleConns(10)       // 用于设置闲置的连接数
-	db.DB().SetMaxOpenConns(100)      // 用于设置最大打开的连接数，默认值为0表示不限制
+	// db.SingularTable(true)            // 支持单数创建数据表
+	db.DB().SetMaxIdleConns(10)  // 用于设置闲置的连接数
+	db.DB().SetMaxOpenConns(100) // 用于设置最大打开的连接数，默认值为0表示不限制
 	DB = db
 	return db
 }

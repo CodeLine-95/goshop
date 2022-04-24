@@ -33,7 +33,7 @@ func (t LocalTime) Value() (driver.Value, error) {
 }
 
 func (t LocalTime) String() string {
-	return t.Format(timeFormat)
+	return time.Now().Format(timeFormat)
 }
 
 func (t LocalTime) local() time.Time {

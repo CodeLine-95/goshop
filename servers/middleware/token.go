@@ -29,7 +29,7 @@ func CheckToken() gin.HandlerFunc {
 		//通过验证后获取claims中的userID
 		userId := claims.UserId
 		DB := config.GetDB()
-		var user model.Users
+		var user model.Admin
 		DB.First(&user, userId)
 		//检查用户是否存在
 		if user.ID == 0 {

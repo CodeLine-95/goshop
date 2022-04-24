@@ -102,7 +102,7 @@ func Login(ctx *gin.Context) {
 	updateData := make(map[string]interface{})
 	updateData["loginip"] = ip.String()
 	updateData["login_at"] = LocalTime.String()
-	DB.Model(&model.Admin{}).Where("id = ?", user.ID).Update(updateData)
+	DB.Model(&user).Where("id = ?", user.ID).Updates(updateData)
 	// 返回值
 	utils.Success(ctx, "登录成功", gin.H{
 		"token": token,
