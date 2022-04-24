@@ -34,6 +34,11 @@ func Routers(r *gin.Engine) {
 					goodsGroup.PUT("/edit", controller.EditGoods)
 					goodsGroup.PUT("/is-uper-lower", controller.IsUperOrLower)
 				}
+				// 角色
+				roleGroup := adminGroup.Group("/role")
+				{
+					roleGroup.POST("/add", controller.AddRole)
+				}
 			}
 
 		}

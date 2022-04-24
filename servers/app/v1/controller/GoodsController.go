@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
+	"goshop/utils/Paginate"
 	"strconv"
 )
 
@@ -14,18 +14,23 @@ func GetGoodsList(ctx *gin.Context) {
 	DB := config.InitDB()
 
 	// 获取参数
-	params, _ := utils.DataMapByRequest(ctx)
-	page, _ := strconv.Atoi(params["page"])
-	pageSize, _ := strconv.Atoi(params["pageSize"])
-	Offset := (page - 1) * pageSize
+	//params, _ := utils.DataMapByRequest(ctx)
 	// 查询数据
 	var goods model.Goods
-	DB.Limit(page).Offset(Offset).First(&goods)
-
-	fmt.Println(goods)
-
+	var GoodResult []model.GoodResult
+	DB.Table(goods.TableName()).Scopes(Paginate.Paginate(ctx)).Order("created_at desc").Find(&GoodResult)
+	// struct 转 map  (反射 reflect包)
+	//data := make(map[string]interface{})
+	//elem := reflect.ValueOf(&goods).Elem()
+	//var relType reflect.Type
+	//for i := 0; i < relType.NumField(); i++ {
+	//	data[relType.Field(i).Name] = elem.Field(i).Interface()
+	//}
 	// 返回值
-	utils.Success(ctx, "获取成功", nil)
+	utils.Success(ctx, "获取成功", gin.H{
+		"coount": len(GoodResult),
+		"data":   GoodResult,
+	})
 }
 
 // 插入商品
