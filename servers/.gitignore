@@ -1,6 +1,9 @@
 ../.idea/
 .vscode/
+./storage
 *.swp
 *.swo
 
-blogs.log
+goshop.log
+goshop.png
+app.yml

@@ -29,7 +29,7 @@ func Routers(r *gin.Engine) {
 				// 商品
 				goodsGroup := adminGroup.Group("/goods")
 				{
-					goodsGroup.GET("/get-list", controller.GetGoodsList)
+					goodsGroup.POST("/get-list", controller.GetGoodsList)
 					goodsGroup.POST("/add", controller.AddGoods)
 					goodsGroup.PUT("/edit", controller.EditGoods)
 					goodsGroup.PUT("/is-uper-lower", controller.IsUperOrLower)

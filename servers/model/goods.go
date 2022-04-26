@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"goshop/utils"
 	"goshop/utils/Paginate"
 )
 
@@ -20,6 +20,7 @@ type Goods struct {
 	GoodsCover     string  `json:"goods_cover" gorm:"size:255;not null;default:'';comment:'商品封面图'"`                       // 商品封面图
 	GoodsSlides    string  `json:"goods_slides" gorm:"size:255;not null;default:'';comment:'商品幻灯片'"`                      // 商品幻灯片
 	GoodsStatus    uint64  `json:"goods_status" gorm:"size:10;not null;default:0;comment:'商品状态'"`                         // 商品状态
+	LoginTime      string  `json:"login_time"`                                                                            // 登录时间
 }
 
 // 获取表名
@@ -27,8 +28,13 @@ func (Goods) TableName() string {
 	return "goods"
 }
 
-func (Goods) FindAll(ctx *gin.Context, DB *gorm.DB, params map[string]interface{}) []Goods {
+// 根据检索条件，获取记录行，并获取总记录条数
+func (Goods) FindAll(DB *gorm.DB, params map[string]interface{}) ([]Goods, int64) {
 	var GoodResult []Goods
-	DB.Scopes(Paginate.Paginate(ctx)).Where(params).Order("created_at desc").Find(&GoodResult)
-	return GoodResult
+	page := params["page"].(string)
+	pageSize := params["pageSize"].(string)
+	ParamsFilter := utils.ParamsFilter(params, "page,pageSize")
+	DB.Scopes(Paginate.Paginate(page, pageSize)).Where(ParamsFilter).Order("created_at desc").Find(&GoodResult)
+	GoodCount := DB.Find(&Goods{})
+	return GoodResult, GoodCount.RowsAffected
 }

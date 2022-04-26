@@ -49,3 +49,14 @@ func (t *LocalTime) Scan(v interface{}) error {
 	}
 	return fmt.Errorf("can not convert %v to timestamp", v)
 }
+
+// 将指定格式的日期，转成成 YYYY-MM-DD HH:ii:ss
+//func (t LocalTime) FormatDateString(MyDateString any) string {
+//	// 将日期字符串解析为Go的time对象第一个参数指定格式，第二个是日期字符串
+//	myDate, err := time.Parse(timeFormat, MyDateString.(string))
+//	if err != nil {
+//		return ""
+//	}
+//	// Format使用与parse相同的格式样式，或者我们可以使用预先生成的常量
+//	return myDate.Format(timeFormat)
+//}

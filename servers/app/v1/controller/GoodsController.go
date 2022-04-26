@@ -14,7 +14,7 @@ func GetGoodsList(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
 	// 查询数据
 	var goods model.Goods
-	GoodResult := goods.FindAll(ctx, DB, params)
+	GoodResult, count := goods.FindAll(DB, params)
 	// struct 转 map  (反射 reflect包)
 	//data := make(map[string]interface{})
 	//elem := reflect.ValueOf(&goods).Elem()
@@ -24,8 +24,8 @@ func GetGoodsList(ctx *gin.Context) {
 	//}
 	// 返回值
 	utils.Success(ctx, "获取成功", gin.H{
-		"coount": len(GoodResult),
-		"data":   GoodResult,
+		"count": count,
+		"data":  GoodResult,
 	})
 }
 
@@ -117,6 +117,6 @@ func IsUperOrLower(ctx *gin.Context) {
 	if result.Error != nil {
 		utils.Fail(ctx, result.Error.Error(), nil)
 	} else {
-		utils.Success(ctx, "更新成功", nil)
+		utils.Success(ctx, "上架成功", nil)
 	}
 }

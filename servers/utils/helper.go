@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -93,4 +94,14 @@ func getIpFromAddr(addr net.Addr) net.IP {
 		return nil
 	}
 	return ip
+}
+
+func ParamsFilter(params map[string]interface{}, isFilterStr string) map[string]interface{} {
+	var data = make(map[string]interface{})
+	for key, value := range params {
+		if find := strings.Contains(isFilterStr, key); !find {
+			data[key] = value
+		}
+	}
+	return data
 }
