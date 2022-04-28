@@ -20,7 +20,6 @@ type Goods struct {
 	GoodsCover     string  `json:"goods_cover" gorm:"size:255;not null;default:'';comment:'商品封面图'"`                       // 商品封面图
 	GoodsSlides    string  `json:"goods_slides" gorm:"size:255;not null;default:'';comment:'商品幻灯片'"`                      // 商品幻灯片
 	GoodsStatus    uint64  `json:"goods_status" gorm:"size:10;not null;default:0;comment:'商品状态'"`                         // 商品状态
-	LoginTime      string  `json:"login_time"`                                                                            // 登录时间
 }
 
 // 获取表名

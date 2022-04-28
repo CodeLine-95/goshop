@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Paginate return *gorm.DB converted to type string.
 func Paginate(page, pageSize string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		pageUp, _ := strconv.Atoi(page)
