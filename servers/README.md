@@ -1,6 +1,8 @@
 # goshop
 ![基于go开发的综合商城系统](goshop.png)
 ### 基于go开发的综合商城系统api
+#### 加入我们
+![加入我们](../%E5%8A%A0%E5%85%A5%E6%88%91%E4%BB%AC.png)
 
 #### 软件架构
 1. **config**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全局配置存放目录 **app.yml**
