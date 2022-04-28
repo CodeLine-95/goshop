@@ -101,7 +101,7 @@ func Login(ctx *gin.Context) {
 	var LocalTime time.LocalTime
 	updateData := make(map[string]interface{})
 	updateData["loginip"] = ip.String()
-	updateData["login_at"] = LocalTime.String()
+	updateData["login_at"] = LocalTime.FormatDateString(LocalTime.String())
 	DB.Model(&user).Where("id = ?", user.ID).Updates(updateData)
 	// 返回值
 	utils.Success(ctx, "登录成功", gin.H{
@@ -109,4 +109,19 @@ func Login(ctx *gin.Context) {
 	})
 }
 
-// 刷新token
+// 获取用户信息
+func UserInfo(ctx *gin.Context) {
+	user, _ := ctx.Get("user")
+	UserResultData := make(map[string]interface{})
+	userModel := user.(model.Admin)
+	UserResultData["username"] = userModel.Username
+	UserResultData["usernick"] = userModel.Usernick
+	UserResultData["avatar"] = userModel.Avatar
+	UserResultData["phone"] = userModel.Phone
+	UserResultData["email"] = userModel.Email
+	UserResultData["loginip"] = userModel.Loginip
+	UserResultData["logintime"] = userModel.LoginAt
+	UserResultData["group"] = userModel.Group
+	// 返回值
+	utils.Success(ctx, "获取成功", UserResultData)
+}

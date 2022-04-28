@@ -14,4 +14,5 @@ type Admin struct {
 	Loginip  string `gorm:"type:varchar(20);not null"`        // 登录IP
 	Email    string `gorm:"size:255;not null"`                // 邮箱
 	Group    string `gorm:"size:255;not null"`                // 角色组 1,2,3,4
+	LoginAt  string `gorm:"size:255;not null"`                // 登录时间
 }

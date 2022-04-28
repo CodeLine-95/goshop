@@ -15,7 +15,7 @@ func CheckToken() gin.HandlerFunc {
 		tokenString := ctx.GetHeader("Authorization")
 		// 验证token非空
 		if tokenString == "" {
-			utils.Response(ctx, http.StatusUnauthorized, 401, "权限不足", nil)
+			utils.Response(ctx, http.StatusUnauthorized, 404, "未设置token", nil)
 			ctx.Abort()
 			return
 		}
