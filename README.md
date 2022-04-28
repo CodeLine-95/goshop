@@ -1,5 +1,9 @@
 # goshop
+![基于go开发的综合商城系统](goshop.png)
 ### 基于go开发的综合商城系统api
+
+![goshop](加入我们.png)
+
 
 #### 软件架构
 1. **config**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全局配置存放目录 **app.yml**
@@ -40,20 +44,11 @@ git clone https://gitee.com/jobhandsome/goshop.git
 4.  进入server目录初始化mod
 
 ```
-cd server
 go mod init goshop
 go mod tidy
 ```
-5.  运行server项目
+5.  运行项目
 
 ```
 go run main.go
-```
-
-6. 运行web项目
-
-```
-cd web
-yarn dev
-
 ```
