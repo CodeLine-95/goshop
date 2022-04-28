@@ -1,5 +1,5 @@
 # goshop
-![基于go开发的综合商城系统](goshop.png)
+![基于go开发的综合商城系统api](goshop.png)
 ### 基于go开发的综合商城系统api
 
 ![goshop](加入我们.png)
