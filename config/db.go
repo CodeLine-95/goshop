@@ -28,7 +28,7 @@ func InitDB() *gorm.DB {
 		logger.PanicError(err, "链接数据库错误", true)
 	}
 	db.AutoMigrate(&model.Admin{})    // 自动创建 User 表
-	db.AutoMigrate(&model.Role{})     // 自动创建 Role 表
+	db.AutoMigrate(&model.Roles{})    // 自动创建 Roles 表
 	db.AutoMigrate(&model.Menu{})     // 自动创建 Menu 表
 	db.AutoMigrate(&model.RoleMenu{}) // 自动创建 RoleMenu 表
 	db.AutoMigrate(&model.Goods{})    // 自动创建 Goods 表

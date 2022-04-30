@@ -37,6 +37,7 @@ func Routers(r *gin.Engine) {
 				// 角色
 				roleGroup := adminGroup.Group("/role")
 				{
+					roleGroup.POST("/list", controller.RoleLists)
 					roleGroup.POST("/add", controller.AddRole)
 				}
 			}

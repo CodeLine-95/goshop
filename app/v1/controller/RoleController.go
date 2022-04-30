@@ -7,13 +7,28 @@ import (
 	"goshop/utils"
 )
 
+// 获取角色列表
+func RoleLists(ctx *gin.Context) {
+	DB := config.InitDB()
+	params, _ := utils.DataMapByRequest(ctx)
+	// 查询数据
+	var roles model.Roles
+	Result, totalCount := roles.FindAll(DB, params)
+	TreeResult := roles.ToTree(Result)
+	// 返回值
+	utils.Success(ctx, "获取成功", gin.H{
+		"count": totalCount,
+		"data":  TreeResult,
+	})
+}
+
 // 创建角色
 func AddRole(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
 	ParentID, _ := params["ParentID"].(uint)
 	Sort, _ := params["Sort"].(uint)
 	Status, _ := params["Status"].(uint)
-	role := model.Role{
+	roles := model.Roles{
 		Name:     params["Name"].(string),
 		Alias:    params["Alias"].(string),
 		ParentID: ParentID,
@@ -25,7 +40,7 @@ func AddRole(ctx *gin.Context) {
 	// 获取数据库句柄
 	DB := config.GetDB()
 	// 写入数据库
-	result := DB.Create(&role)
+	result := DB.Create(&roles)
 	// 返回值
 	if result.Error != nil {
 		utils.Fail(ctx, result.Error.Error(), nil)
