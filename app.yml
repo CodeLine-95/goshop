@@ -3,6 +3,12 @@ server:
   port: 9000
   jwtKey: HORL)JUZ&AFIW*(XGS
 
+captcha:
+  length: 4
+  lang: zh
+  w: 107
+  h: 36
+
 # mysql配置项
 db:
   driver: mysql
