@@ -2,7 +2,7 @@
 
 ### 基于go开发的综合商城系统api
 
-![goshop](assets/layouts/goshop.png)
+![开源项目](assets/layouts/goshop.png)
 
 ### 加入我们
 ##### 公众号
