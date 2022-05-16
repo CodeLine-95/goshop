@@ -27,3 +27,7 @@ func InitCasbin() {
 
 	Enforcer = Enforcer
 }
+
+func GetEnforcer() *casbin.Enforcer {
+	return Enforcer
+}

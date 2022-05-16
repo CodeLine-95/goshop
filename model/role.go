@@ -23,7 +23,7 @@ func (Roles) TableName() string {
 }
 
 // 根据检索条件，获取记录行，并获取总记录条数
-func (Roles) FindAll(DB *gorm.DB, params map[string]interface{}) ([]*Roles, int64) {
+func (Roles) FindAll(DB *gorm.DB, params map[string]any) ([]*Roles, int64) {
 	var Result []*Roles
 	page := params["page"].(string)
 	pageSize := params["pageSize"].(string)
@@ -31,6 +31,45 @@ func (Roles) FindAll(DB *gorm.DB, params map[string]interface{}) ([]*Roles, int6
 	DB.Scopes(Paginate.Paginate(page, pageSize)).Where(ParamsFilter).Order("created_at desc").Find(&Result)
 	TotalCount := DB.Find(&Roles{})
 	return Result, TotalCount.RowsAffected
+}
+
+// 创建角色
+func (Roles) AddRole(DB *gorm.DB, params map[string]any) error {
+	ParentID, _ := params["ParentID"].(uint)
+	Sort, _ := params["Sort"].(uint)
+	Status, _ := params["Status"].(uint)
+	roles := Roles{
+		Name:     params["Name"].(string),
+		Alias:    params["Alias"].(string),
+		ParentID: ParentID,
+		Sort:     Sort,
+		Remark:   params["Remark"].(string),
+		Status:   Status,
+	}
+
+	// 写入数据库
+	result := DB.Create(&roles)
+	// 返回值
+	return result.Error
+}
+
+// 编辑角色
+func (Roles) EditRole(DB *gorm.DB, params map[string]any) error {
+	int_id, _ := params["id"].(uint)
+	ParentID, _ := params["ParentID"].(uint)
+	Sort, _ := params["Sort"].(uint)
+	Status, _ := params["Status"].(uint)
+	var roles Roles
+	// 查询当前数据
+	DB.First(&roles, int_id)
+	roles.Name = params["Name"].(string)
+	roles.Alias = params["Alias"].(string)
+	roles.ParentID = ParentID
+	roles.Sort = Sort
+	roles.Remark = params["Remark"].(string)
+	roles.Status = Status
+	result := DB.Save(&roles)
+	return result.Error
 }
 
 // RoleTrees 二叉树列表

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goshop/app/v1/controller"
 	"goshop/middleware"
+	"goshop/utils/captcha"
 )
 
 func Routers(r *gin.Engine) {
@@ -17,6 +18,9 @@ func Routers(r *gin.Engine) {
 			{
 				authGroup.POST("/resgister", controller.Register)
 				authGroup.POST("/login", controller.Login)
+				authGroup.GET("/captcha", func(ctx *gin.Context) {
+					captcha.Captcha(ctx)
+				})
 			}
 			// 管理平台
 			adminGroup := v1.Group("/admin", middleware.CheckToken())

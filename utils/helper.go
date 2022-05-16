@@ -23,10 +23,10 @@ func Fail(ctx *gin.Context, msg string, data any) {
 }
 
 // 获取全部请求参数
-func DataMapByRequest(ctx *gin.Context) (dataMap map[string]interface{}, err error) {
+func DataMapByRequest(ctx *gin.Context) (dataMap map[string]any, err error) {
 	//必须先解析Form
 	err = ctx.Request.ParseForm()
-	dataMap = make(map[string]interface{})
+	dataMap = make(map[string]any)
 	//说明:须post方法,加: 'Content-Type': 'application/x-www-form-urlencoded'
 	for key, _ := range ctx.Request.PostForm {
 		dataMap[key] = ctx.PostForm(key)
@@ -96,8 +96,9 @@ func getIpFromAddr(addr net.Addr) net.IP {
 	return ip
 }
 
-func ParamsFilter(params map[string]interface{}, isFilterStr string) map[string]interface{} {
-	var data = make(map[string]interface{})
+// 过滤指定数组中的key
+func ParamsFilter(params map[string]any, isFilterStr string) map[string]any {
+	var data = make(map[string]any)
 	for key, value := range params {
 		if find := strings.Contains(isFilterStr, key); !find {
 			data[key] = value

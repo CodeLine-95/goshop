@@ -25,26 +25,31 @@ func RoleLists(ctx *gin.Context) {
 // 创建角色
 func AddRole(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
-	ParentID, _ := params["ParentID"].(uint)
-	Sort, _ := params["Sort"].(uint)
-	Status, _ := params["Status"].(uint)
-	roles := model.Roles{
-		Name:     params["Name"].(string),
-		Alias:    params["Alias"].(string),
-		ParentID: ParentID,
-		Sort:     Sort,
-		Remark:   params["Remark"].(string),
-		Status:   Status,
-	}
-
 	// 获取数据库句柄
 	DB := config.GetDB()
 	// 写入数据库
-	result := DB.Create(&roles)
+	var roles model.Roles
+	err := roles.AddRole(DB, params)
 	// 返回值
-	if result.Error != nil {
-		utils.Fail(ctx, result.Error.Error(), nil)
+	if err.Error != nil {
+		utils.Fail(ctx, err.Error(), nil)
 	} else {
 		utils.Success(ctx, "创建角色成功", nil)
+	}
+}
+
+// 编辑角色
+func EditRole(ctx *gin.Context) {
+	params, _ := utils.DataMapByRequest(ctx)
+	// 获取数据库句柄
+	DB := config.GetDB()
+	// 写入数据库
+	var roles model.Roles
+	err := roles.EditRole(DB, params)
+	// 返回值
+	if err.Error != nil {
+		utils.Fail(ctx, err.Error(), nil)
+	} else {
+		utils.Success(ctx, "编辑角色成功", nil)
 	}
 }
