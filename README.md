@@ -2,7 +2,7 @@
 
 ### 基于go开发的综合商城系统api
 
-![goshop](加入我们.png)![输入图片说明](WechatIMG335.jpeg)![输入图片说明](WechatIMG336.jpeg)
+![goshop](加入我们.png)
 
 
 #### 软件架构
