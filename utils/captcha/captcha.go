@@ -1,66 +1,36 @@
 package captcha
 
 import (
-	"bytes"
-	"github.com/dchest/captcha"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-	"net/http"
-	"strconv"
-	"time"
+	"github.com/mojocn/base64Captcha"
+	"goshop/utils"
 )
 
-// 生成验证码
-func Captcha(ctx *gin.Context) {
-	l := captcha.DefaultLen
-	w, _ := strconv.Atoi(viper.GetString("captcha.w"))
-	h, _ := strconv.Atoi(viper.GetString("captcha.h"))
-	l, _ = strconv.Atoi(viper.GetString("captcha.length"))
-	captchaId := captcha.NewLen(l)
-	session := sessions.Default(ctx)
-	session.Set("captcha", captchaId)
-	_ = session.Save()
-	_ = Serve(ctx.Writer, ctx.Request, captchaId, ".png", viper.GetString("captcha.lang"), false, w, h)
+type CaptchaResult struct {
+	Id           string `json:"id"`
+	Base64Blob   string `json:"base_64_blob"`
+	VertifyValue string `json:"code"`
 }
 
-// 验证码的header头设置，生成页面显示
-func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
-	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	w.Header().Set("Pragma", "no-cache")
-	w.Header().Set("Expires", "0")
-
-	var content bytes.Buffer
-	switch ext {
-	case ".png":
-		w.Header().Set("Content-Type", "image/png")
-		_ = captcha.WriteImage(&content, id, width, height)
-	case ".wav":
-		w.Header().Set("Content-Type", "audio/x-wav")
-		_ = captcha.WriteAudio(&content, id, lang)
-	default:
-		return captcha.ErrNotFound
+// 生成验证码
+func GenerateCapcha(ctx *gin.Context) {
+	parameters := base64Captcha.ConfigDigit{
+		Height:     30,
+		Width:      60,
+		CaptchaLen: 4,
+		MaxSkew:    0,
+		DotCount:   0,
 	}
-
-	if download {
-		w.Header().Set("Content-Type", "application/octet-stream")
+	captchaId, captchaInstance := base64Captcha.GenerateCaptcha("", parameters)
+	base64Blob := base64Captcha.CaptchaWriteToBase64Encoding(captchaInstance)
+	captchaResult := &CaptchaResult{
+		Id:         captchaId,
+		Base64Blob: base64Blob,
 	}
-	http.ServeContent(w, r, id+ext, time.Time{}, bytes.NewReader(content.Bytes()))
-	return nil
+	utils.Success(ctx, "成功", captchaResult)
 }
 
 // 验证
-func CaptchaVerify(c *gin.Context, code string) bool {
-	session := sessions.Default(c)
-	if captchaId := session.Get("captcha"); captchaId != nil {
-		session.Delete("captcha")
-		_ = session.Save()
-		if captcha.VerifyString(captchaId.(string), code) {
-			return true
-		} else {
-			return false
-		}
-	} else {
-		return false
-	}
+func VerfiyCaptcha(idkey, verifyValue string) bool {
+	return base64Captcha.VerifyCaptcha(idkey, verifyValue)
 }

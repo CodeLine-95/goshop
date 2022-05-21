@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	api_v1 "goshop/api/v1/route"
 	app_v1 "goshop/app/v1/route"
-	"goshop/middleware"
 	"io"
 	"os"
 )
@@ -31,8 +30,6 @@ func Init() *gin.Engine {
 	gin.DefaultWriter = io.MultiWriter(f)
 	// 创建一个默认路由
 	r := gin.Default()
-	// 开启session
-	r.Use(middleware.Session("topgoer"))
 	// 加载注册的app路由
 	for _, opt := range Options {
 		opt(r)

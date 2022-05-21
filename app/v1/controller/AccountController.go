@@ -7,7 +7,7 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
-	captcha2 "goshop/utils/captcha"
+	"goshop/utils/captcha"
 	"goshop/utils/time"
 )
 
@@ -67,7 +67,8 @@ func Login(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
 	username := params["username"].(string)
 	password := params["password"].(string)
-	captcha := params["captchaCode"].(string)
+	captchaId := params["captchaId"].(string)
+	captchaCode := params["captchaCode"].(string)
 	// 表单验证
 	if len(username) == 0 {
 		utils.Fail(ctx, "用户名不能为空", nil)
@@ -77,7 +78,7 @@ func Login(ctx *gin.Context) {
 		utils.Fail(ctx, "密码不能为空", nil)
 		return
 	}
-	if len(captcha) == 0 {
+	if len(captchaCode) == 0 {
 		utils.Fail(ctx, "验证码不能为空", nil)
 		return
 	}
@@ -95,7 +96,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 验证验证码
-	if !captcha2.CaptchaVerify(ctx, captcha) {
+	if !captcha.VerfiyCaptcha(captchaId, captchaCode) {
 		utils.Fail(ctx, "验证码不正确", nil)
 		return
 	}
@@ -117,6 +118,11 @@ func Login(ctx *gin.Context) {
 	utils.Success(ctx, "登录成功", gin.H{
 		"token": token,
 	})
+}
+
+// 生成验证码
+func GetCaptcha(ctx *gin.Context) {
+	captcha.GenerateCapcha(ctx)
 }
 
 // 获取用户信息
