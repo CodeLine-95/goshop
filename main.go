@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
+	//_ "github.com/razeencheng/demo-go/swaggo-gin/docs"
 	"github.com/spf13/viper"
 	"goshop/config"
 	"goshop/routes"
@@ -24,6 +25,7 @@ func initConfig() {
 func initGin() {
 	// 初始化gin框架
 	r := routes.Init()
+	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 读取yml配置文件
 	port := viper.GetString("server.port")
 	if port != "" {

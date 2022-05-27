@@ -17,13 +17,6 @@ func GetGoodsList(ctx *gin.Context) {
 	DB := config.GetDB()
 	// 查询数据
 	GoodResult, count := goods.FindAll(DB, params)
-	// struct 转 map  (反射 reflect包)
-	//data := make(map[string]interface{})
-	//elem := reflect.ValueOf(&goods).Elem()
-	//var relType reflect.Type
-	//for i := 0; i < relType.NumField(); i++ {
-	//	data[relType.Field(i).Name] = elem.Field(i).Interface()
-	//}
 	// 返回值
 	utils.Success(ctx, "获取成功", gin.H{
 		"count": count,

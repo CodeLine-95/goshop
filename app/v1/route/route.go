@@ -12,6 +12,12 @@ func Routers(r *gin.Engine) {
 		// v1
 		v1 := app.Group("/v1")
 		{
+			// 公共
+			commonGroup := v1.Group("/common")
+			{
+				// 上传
+				commonGroup.POST("/uploads", controller.Uploads)
+			}
 			// 登录|注册
 			authGroup := v1.Group("/account")
 			{
@@ -23,6 +29,11 @@ func Routers(r *gin.Engine) {
 			// 管理平台
 			adminGroup := v1.Group("/admin", middleware.CheckToken())
 			{
+				// 服务器信息
+				serversGroup := adminGroup.Group("/servers")
+				{
+					serversGroup.GET("/info", controller.GetServers)
+				}
 				// 用户信息
 				userGroup := adminGroup.Group("/user")
 				{
