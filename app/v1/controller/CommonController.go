@@ -32,17 +32,21 @@ func Uploads(ctx *gin.Context) {
 		}
 		//3、创建图片保存目录,linux下需要设置权限（0666可读可写） static/upload/20200623
 		currentTime := time.Now().Format("20060102")
-		// 使用flag 定义字符变量
-		dir := flag.String("uploads", "./uploads/"+currentTime, "file name")
-		// 生成目录文件夹，并错误判断
-		if err := os.MkdirAll(*dir, 0755); err != nil {
-			logger.PanicError(err, "上传错误", false)
-			// 返回值
-			utils.Fail(ctx, "MkdirAll失败", nil)
-			return
-		}
 		//4、生成文件名称 144325235235.png
 		fileUnixName := strconv.FormatInt(time.Now().UnixNano(), 10)
+		// 使用flag 定义字符变量 name变量是唯一的
+		// 这里使用时间戳来定义唯一值：name值
+		dir := flag.String(fileUnixName, "./uploads/"+currentTime, "file name")
+		ok, _ := utils.PathExists(*dir)
+		if !ok {
+			// 生成目录文件夹，并错误判断
+			if err := os.MkdirAll(*dir, 0755); err != nil {
+				logger.PanicError(err, "上传错误", false)
+				// 返回值
+				utils.Fail(ctx, "MkdirAll失败", nil)
+				return
+			}
+		}
 		//5、上传文件 static/upload/20200623/144325235235.png
 		saveDir := path.Join(*dir, fileUnixName+extName)
 		err := ctx.SaveUploadedFile(file, saveDir)

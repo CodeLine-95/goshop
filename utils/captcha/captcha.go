@@ -19,7 +19,7 @@ func GenerateCapcha(ctx *gin.Context) {
 		Width:      60,
 		CaptchaLen: 4,
 		MaxSkew:    0,
-		DotCount:   0,
+		DotCount:   2,
 	}
 	captchaId, captchaInstance := base64Captcha.GenerateCaptcha("", parameters)
 	base64Blob := base64Captcha.CaptchaWriteToBase64Encoding(captchaInstance)
