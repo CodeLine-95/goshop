@@ -54,20 +54,19 @@ func EditRole(ctx *gin.Context) {
 	}
 }
 
-// 分配角色
-func AssignRole(ctx *gin.Context) {
+// 删除商品
+func DelRole(ctx *gin.Context) {
+	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
-	int_id, _ := params["uid"].(uint)
+	id, _ := params["id"].(uint)
 	// 获取数据库句柄
 	DB := config.GetDB()
-	// 获取用户
-	var admin model.Admin
-	DB.First(&admin, int_id)
-	admin.Group = params["groupStr"].(string)
-	result := DB.Save(&admin)
-	if result.Error != nil {
-		utils.Fail(ctx, result.Error.Error(), nil)
+	var roles model.Roles
+	res := DB.Delete(&roles, id)
+	// 返回值
+	if res.Error != nil {
+		utils.Fail(ctx, res.Error.Error(), nil)
 	} else {
-		utils.Success(ctx, "分配成功", nil)
+		utils.Success(ctx, "删除成功", nil)
 	}
 }

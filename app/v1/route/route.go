@@ -38,6 +38,7 @@ func Routers(r *gin.Engine) {
 				userGroup := adminGroup.Group("/user")
 				{
 					userGroup.POST("/get-info", controller.UserInfo)
+					userGroup.POST("/assign-role", controller.AssignRole)
 				}
 				// 商品
 				goodsGroup := adminGroup.Group("/goods")
@@ -53,7 +54,8 @@ func Routers(r *gin.Engine) {
 				{
 					roleGroup.POST("/list", controller.RoleLists)
 					roleGroup.POST("/add", controller.AddRole)
-					roleGroup.POST("/assign", controller.AssignRole)
+					roleGroup.POST("/edit", controller.EditRole)
+					roleGroup.POST("/del", controller.DelRole)
 				}
 			}
 

@@ -67,8 +67,8 @@ func Login(ctx *gin.Context) {
 	params, _ := utils.DataMapByRequest(ctx)
 	username := params["username"].(string)
 	password := params["password"].(string)
-	captchaId := params["captchaId"].(string)
-	captchaCode := params["captchaCode"].(string)
+	//captchaId := params["captchaId"].(string)
+	//captchaCode := params["captchaCode"].(string)
 	// 表单验证
 	if len(username) == 0 {
 		utils.Fail(ctx, "用户名不能为空", nil)
@@ -78,10 +78,10 @@ func Login(ctx *gin.Context) {
 		utils.Fail(ctx, "密码不能为空", nil)
 		return
 	}
-	if len(captchaCode) == 0 {
-		utils.Fail(ctx, "验证码不能为空", nil)
-		return
-	}
+	//if len(captchaCode) == 0 {
+	//	utils.Fail(ctx, "验证码不能为空", nil)
+	//	return
+	//}
 	// 验证用户密码
 	var user model.Admin
 	DB.Where("username = ?", username).First(&user)
@@ -95,11 +95,11 @@ func Login(ctx *gin.Context) {
 		utils.Fail(ctx, "密码错误", nil)
 		return
 	}
-	// 验证验证码
-	if !captcha.VerfiyCaptcha(captchaId, captchaCode) {
-		utils.Fail(ctx, "验证码不正确", nil)
-		return
-	}
+	//// 验证验证码
+	//if !captcha.VerfiyCaptcha(captchaId, captchaCode) {
+	//	utils.Fail(ctx, "验证码不正确", nil)
+	//	return
+	//}
 	// 生成token
 	token, err := config.ReleaseToken(user)
 	if err != nil {
@@ -123,21 +123,4 @@ func Login(ctx *gin.Context) {
 // 生成验证码
 func GetCaptcha(ctx *gin.Context) {
 	captcha.GenerateCapcha(ctx)
-}
-
-// 获取用户信息
-func UserInfo(ctx *gin.Context) {
-	user, _ := ctx.Get("user")
-	UserResultData := make(map[string]interface{})
-	userModel := user.(model.Admin)
-	UserResultData["username"] = userModel.Username
-	UserResultData["usernick"] = userModel.Usernick
-	UserResultData["avatar"] = userModel.Avatar
-	UserResultData["phone"] = userModel.Phone
-	UserResultData["email"] = userModel.Email
-	UserResultData["loginip"] = userModel.Loginip
-	UserResultData["logintime"] = userModel.LoginAt
-	UserResultData["group"] = userModel.Group
-	// 返回值
-	utils.Success(ctx, "获取成功", UserResultData)
 }
