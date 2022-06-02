@@ -29,11 +29,11 @@ func Routers(r *gin.Engine) {
 			// 管理平台
 			adminGroup := v1.Group("/admin", middleware.CheckToken())
 			{
-				// 服务器信息
-				serversGroup := adminGroup.Group("/servers")
-				{
-					serversGroup.GET("/info", controller.GetServers)
-				}
+				//// 服务器信息
+				//serversGroup := adminGroup.Group("/servers")
+				//{
+				//	serversGroup.GET("/info", controller.GetServers)
+				//}
 				// 用户信息
 				userGroup := adminGroup.Group("/user")
 				{
@@ -44,8 +44,9 @@ func Routers(r *gin.Engine) {
 				{
 					goodsGroup.POST("/get-list", controller.GetGoodsList)
 					goodsGroup.POST("/add", controller.AddGoods)
-					goodsGroup.PUT("/edit", controller.EditGoods)
-					goodsGroup.PUT("/is-uper-lower", controller.IsUperOrLower)
+					goodsGroup.POST("/edit", controller.EditGoods)
+					goodsGroup.POST("/del", controller.DelGoods)
+					goodsGroup.POST("/is-uper-lower", controller.IsUperOrLower)
 				}
 				// 角色
 				roleGroup := adminGroup.Group("/role")

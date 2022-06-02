@@ -57,6 +57,23 @@ func EditGoods(ctx *gin.Context) {
 	}
 }
 
+// 删除商品
+func DelGoods(ctx *gin.Context) {
+	// 获取参数
+	params, _ := utils.DataMapByRequest(ctx)
+	id, _ := params["id"].(uint)
+	// 获取数据库句柄
+	DB := config.GetDB()
+	var goods model.Goods
+	res := DB.Delete(&goods, id)
+	// 返回值
+	if res.Error != nil {
+		utils.Fail(ctx, res.Error.Error(), nil)
+	} else {
+		utils.Success(ctx, "删除成功", nil)
+	}
+}
+
 // 是否上下架
 func IsUperOrLower(ctx *gin.Context) {
 	// 获取参数
