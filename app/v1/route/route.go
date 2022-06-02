@@ -52,6 +52,7 @@ func Routers(r *gin.Engine) {
 				{
 					roleGroup.POST("/list", controller.RoleLists)
 					roleGroup.POST("/add", controller.AddRole)
+					roleGroup.POST("/assign", controller.AssignRole)
 				}
 			}
 

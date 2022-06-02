@@ -53,3 +53,21 @@ func EditRole(ctx *gin.Context) {
 		utils.Success(ctx, "编辑角色成功", nil)
 	}
 }
+
+// 分配角色
+func AssignRole(ctx *gin.Context) {
+	params, _ := utils.DataMapByRequest(ctx)
+	int_id, _ := params["uid"].(uint)
+	// 获取数据库句柄
+	DB := config.GetDB()
+	// 获取用户
+	var admin model.Admin
+	DB.First(&admin, int_id)
+	admin.Group = params["groupStr"].(string)
+	result := DB.Save(&admin)
+	if result.Error != nil {
+		utils.Fail(ctx, result.Error.Error(), nil)
+	} else {
+		utils.Success(ctx, "分配成功", nil)
+	}
+}
