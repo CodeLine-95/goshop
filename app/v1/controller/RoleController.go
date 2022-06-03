@@ -54,7 +54,7 @@ func EditRole(ctx *gin.Context) {
 	}
 }
 
-// 删除商品
+// 删除角色
 func DelRole(ctx *gin.Context) {
 	// 获取参数
 	params, _ := utils.DataMapByRequest(ctx)
@@ -68,5 +68,22 @@ func DelRole(ctx *gin.Context) {
 		utils.Fail(ctx, res.Error.Error(), nil)
 	} else {
 		utils.Success(ctx, "删除成功", nil)
+	}
+}
+
+// 分配权限
+func assignRule(ctx *gin.Context) {
+	// 获取参数
+	params, _ := utils.DataMapByRequest(ctx)
+	// 获取数据库句柄
+	DB := config.GetDB()
+	// 写入数据库
+	var roleRules model.RoleRules
+	err := roleRules.AddRoleRule(DB, params)
+	// 返回值
+	if err != nil {
+		utils.Fail(ctx, err.Error(), nil)
+	} else {
+		utils.Success(ctx, "分配成功", nil)
 	}
 }
