@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type RoleRules struct {
 	ID      uint   `json:"id" gorm:"primary_key"`
-	RoleID  uint   `json:"role_id" gorm:"size:10;index;default:'';not null;"`   // 角色编号
+	RoleID  uint   `json:"role_id" gorm:"size:10;index;default:0;not null;"`    // 角色编号
 	RuleStr string `json:"rule_str" grom:"size:255;index;default:'';not nill;"` // 权限字符串编号
 }
 
