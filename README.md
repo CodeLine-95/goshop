@@ -54,11 +54,3 @@ go mod tidy
 ```
 go run main.go
 ```
-
-### 加入我们（其他渠道）
-##### 知识星球
-![知识星球](assets/about/加入我们.png)
-##### 微信群
-![微信群](assets/about/goshop微信群.png)
-##### QQ频道
-![QQ频道](assets/about/QQ.png)
