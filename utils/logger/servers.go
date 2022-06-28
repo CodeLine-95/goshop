@@ -30,7 +30,8 @@ func init() {
 
 	//设置日志切割 rotatelogs
 	logWriter, _ := rotatelogs.New(
-		file+".%Y%m%d.log",
+		//file+".%Y%m%d.log",
+		file+"%Y%m%d",
 		//生成软链 指向最新的日志文件
 		rotatelogs.WithLinkName(file),
 		//文件最大保存时间

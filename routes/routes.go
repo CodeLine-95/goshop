@@ -5,8 +5,6 @@ import (
 	api_v1 "goshop/api/v1/route"
 	app_v1 "goshop/app/v1/route"
 	"goshop/middleware"
-	"io"
-	"os"
 )
 
 type Option func(engine *gin.Engine)
@@ -24,11 +22,11 @@ func Init() *gin.Engine {
 	Include(app_v1.Routers)
 	Include(api_v1.Routers)
 	// 初始化日志
-	gin.DisableConsoleColor()
-	// 创建日志文件
-	f, _ := os.Create("goshop.log")
-	// 写入日志
-	gin.DefaultWriter = io.MultiWriter(f)
+	//gin.DisableConsoleColor()
+	//// 创建日志文件
+	//f, _ := os.Create("goshop.log")
+	//// 写入日志
+	//gin.DefaultWriter = io.MultiWriter(f)
 	// 创建一个默认路由
 	r := gin.Default()
 	r.Use(middleware.LoggerToFile())

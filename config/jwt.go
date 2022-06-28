@@ -3,7 +3,6 @@ package config
 import (
 	"github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"
-	"goshop/model"
 	"goshop/utils"
 	"time"
 )
@@ -15,14 +14,14 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// 生成jwt token
-func ReleaseToken(user model.Admin) (string, error) {
+// ReleaseToken 生成jwt token
+func ReleaseToken(userId uint) (string, error) {
 	ip, _ := utils.ExternalIp()
-	expirTime := time.Now().Add(7 * 24 * time.Hour)
+	expireTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{
-		UserId: user.ID,
+		UserId: userId,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirTime.Unix(),
+			ExpiresAt: expireTime.Unix(),
 			IssuedAt:  time.Now().Unix(),
 			Issuer:    ip.String(),
 			Subject:   "token",
@@ -37,7 +36,7 @@ func ReleaseToken(user model.Admin) (string, error) {
 	return tokenString, err
 }
 
-// 解析jwt token
+// ParseToken 解析jwt token
 func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {

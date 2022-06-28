@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
 	"math/rand"
 	"net"
 	"net/http"
@@ -117,4 +118,8 @@ func PathExists(path string) (bool, error) {
 		return false, nil
 	}
 	return false, err
+}
+
+func UUID() string {
+	return uuid.Must(uuid.NewV4()).String()
 }

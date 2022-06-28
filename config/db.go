@@ -23,7 +23,6 @@ func InitDB() *gorm.DB {
 	loc := viper.GetString("db.loc")
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s", user, pass, host, port, dbname, charset, url.QueryEscape(loc))
 	db, err := gorm.Open(driver, args)
-	logger.Info("连接Mysql 成功", "mysql connect")
 	if err != nil {
 		logger.PanicError(err, "链接数据库错误", true)
 	}
@@ -33,6 +32,7 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.RoleMenu{})  // 自动创建 RoleMenu 表
 	db.AutoMigrate(&model.Goods{})     // 自动创建 Goods 表
 	db.AutoMigrate(&model.RoleRules{}) // 自动创建 RoleRules 表
+	db.AutoMigrate(&model.Users{})     // 自动创建 RoleRules 表
 	// db.SingularTable(true)            // 支持单数创建数据表
 	db.DB().SetMaxIdleConns(10)  // 用于设置闲置的连接数
 	db.DB().SetMaxOpenConns(100) // 用于设置最大打开的连接数，默认值为0表示不限制

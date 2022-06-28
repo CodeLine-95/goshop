@@ -17,7 +17,7 @@ func LoggerToFile() gin.HandlerFunc {
 		//结束时间
 		endTime := time.Now()
 		//执行时间
-		latencyTime := endTime.Sub(startTime)
+		latencyTime := endTime.Sub(startTime).Seconds()
 		//请求方式
 		reqMethod := c.Request.Method
 		//请求路由
@@ -26,6 +26,8 @@ func LoggerToFile() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		//请求IP
 		ClientIp := c.ClientIP()
+		//用户标识
+		UserAgent := c.Request.UserAgent()
 
 		//日志格式
 		logger.Logger.WithFields(logrus.Fields{
@@ -34,6 +36,7 @@ func LoggerToFile() gin.HandlerFunc {
 			"client_ip":    ClientIp,
 			"req_method":   reqMethod,
 			"req_uri":      reqUri,
+			"user_agent":   UserAgent,
 		}).Info()
 
 	}
