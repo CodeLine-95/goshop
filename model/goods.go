@@ -32,7 +32,7 @@ func (Goods) FindAll(DB *gorm.DB, params map[string]any) ([]Goods, int64) {
 	var GoodResult []Goods
 	page := params["page"].(string)
 	pageSize := params["pageSize"].(string)
-	ParamsFilter := utils.ParamsFilter(params, "page,pageSize")
+	ParamsFilter := utils.ParamsFilter("page,pageSize", params)
 	DB.Scopes(Paginate.Paginate(page, pageSize)).Where(ParamsFilter).Order("created_at desc").Find(&GoodResult)
 	GoodCount := DB.Find(&Goods{})
 	return GoodResult, GoodCount.RowsAffected

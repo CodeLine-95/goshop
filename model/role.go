@@ -27,7 +27,7 @@ func (Roles) FindAll(DB *gorm.DB, params map[string]any) ([]*Roles, int64) {
 	var Result []*Roles
 	page := params["page"].(string)
 	pageSize := params["pageSize"].(string)
-	ParamsFilter := utils.ParamsFilter(params, "page,pageSize")
+	ParamsFilter := utils.ParamsFilter("page,pageSize", params)
 	DB.Scopes(Paginate.Paginate(page, pageSize)).Where(ParamsFilter).Order("created_at desc").Find(&Result)
 	TotalCount := DB.Find(&Roles{})
 	return Result, TotalCount.RowsAffected

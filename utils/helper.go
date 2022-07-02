@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
@@ -99,11 +100,14 @@ func getIpFromAddr(addr net.Addr) net.IP {
 }
 
 // 过滤指定数组中的key
-func ParamsFilter(params map[string]any, isFilterStr string) map[string]any {
+func ParamsFilter(isFilterStr string, params map[string]any) map[string]any {
 	var data = make(map[string]any)
 	for key, value := range params {
-		if find := strings.Contains(isFilterStr, key); !find {
-			data[key] = value
+		if value != "" {
+			find := strings.Contains(isFilterStr, key)
+			if !find {
+				data[key] = value
+			}
 		}
 	}
 	return data
@@ -122,4 +126,18 @@ func PathExists(path string) (bool, error) {
 
 func UUID() string {
 	return uuid.Must(uuid.NewV4()).String()
+}
+
+// AnyToMap interface 转 map
+func AnyToMap(v any) (map[string]any, error) {
+	dataJson, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	var MapData map[string]any
+	err = json.Unmarshal(dataJson, &MapData)
+	if err != nil {
+		return nil, err
+	}
+	return MapData, nil
 }

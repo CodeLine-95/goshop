@@ -16,6 +16,11 @@ func Routers(r *gin.Engine) {
 			authGroup.POST("/resgister", controller.Register)
 			authGroup.POST("/login", controller.Login)
 		}
+		// 分类
+		categoryGroup := v1.Group("/category")
+		{
+			categoryGroup.GET("/get-lists", controller.GetCategoryLists)
+		}
 
 	}
 }
