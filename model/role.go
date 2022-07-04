@@ -10,10 +10,10 @@ type Roles struct {
 	Model
 	Name     string     `json:"name" gorm:"size:100;index;default:'';not null;"`    // 角色名称
 	Alias    string     `json:"alias" grom:"size:255;index;default:'';not nill;"`   // 别名
-	ParentID uint       `json:"parent_id" gorm:"size:10;index;default:0;not null;"` // 父级ID
-	Sort     uint       `json:"sort" gorm:"size:1;index;default:0;"`                // 排序值
+	ParentID int64      `json:"parent_id" gorm:"size:10;index;default:0;not null;"` // 父级ID
+	Sort     int64      `json:"sort" gorm:"size:1;index;default:0;"`                // 排序值
 	Remark   string     `json:"remark" gorm:"size:255;"`                            // 备注
-	Status   uint       `json:"status" gorm:"size:1;index;default:0;"`              // 状态（1:启用   2:禁用）
+	Status   int64      `json:"status" gorm:"size:1;index;default:0;"`              // 状态（1:启用   2:禁用）
 	Children *RoleTrees `json:"children"`
 }
 
@@ -35,9 +35,9 @@ func (Roles) FindAll(DB *gorm.DB, params map[string]any) ([]*Roles, int64) {
 
 // 创建角色
 func (Roles) AddRole(DB *gorm.DB, params map[string]any) error {
-	ParentID, _ := params["ParentID"].(uint)
-	Sort, _ := params["Sort"].(uint)
-	Status, _ := params["Status"].(uint)
+	ParentID, _ := params["ParentID"].(int64)
+	Sort, _ := params["Sort"].(int64)
+	Status, _ := params["Status"].(int64)
 	roles := Roles{
 		Name:     params["Name"].(string),
 		Alias:    params["Alias"].(string),
@@ -55,10 +55,10 @@ func (Roles) AddRole(DB *gorm.DB, params map[string]any) error {
 
 // 编辑角色
 func (Roles) EditRole(DB *gorm.DB, params map[string]any) error {
-	int_id, _ := params["id"].(uint)
-	ParentID, _ := params["ParentID"].(uint)
-	Sort, _ := params["Sort"].(uint)
-	Status, _ := params["Status"].(uint)
+	int_id, _ := params["id"].(int64)
+	ParentID, _ := params["ParentID"].(int64)
+	Sort, _ := params["Sort"].(int64)
+	Status, _ := params["Status"].(int64)
 	var roles Roles
 	// 查询当前数据
 	DB.First(&roles, int_id)
@@ -78,7 +78,7 @@ type RoleTrees []*Roles
 // ToTree 转换为树形结构
 func (Roles) ToTree(data RoleTrees) RoleTrees {
 	// 定义 HashMap 的变量，并初始化
-	TreeData := make(map[uint]*Roles)
+	TreeData := make(map[int64]*Roles)
 	// 先重组数据：以数据的ID作为外层的key编号，以便下面进行子树的数据组合
 	for _, item := range data {
 		TreeData[item.ID] = item

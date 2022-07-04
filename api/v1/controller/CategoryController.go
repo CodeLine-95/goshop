@@ -5,14 +5,10 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
-	"goshop/utils/Paginate"
-	"strconv"
 )
 
 type ParamsRequest struct {
-	Page     int64  `form:"page" binding:"required" json:"page"`
-	PageSize int64  `form:"pageSize" binding:"required" json:"pageSize"`
-	Name     string `form:"name" json:"name"`
+	Name string `form:"name" json:"name"`
 }
 
 // GetCategoryLists 获取分类列表
@@ -28,7 +24,7 @@ func GetCategoryLists(ctx *gin.Context) {
 	// 获取列表
 	DB := config.GetDB()
 	var Result []*model.Category
-	resErr := DB.Scopes(Paginate.Paginate(strconv.FormatInt(params.Page, 10), strconv.FormatInt(params.PageSize, 10))).Where(ParamsFilter).Find(&Result).Error
+	resErr := DB.Where(ParamsFilter).Find(&Result).Error
 	if resErr != nil {
 		utils.Fail(ctx, resErr.Error(), nil)
 		return

@@ -1,9 +1,7 @@
 package model
 
-import "github.com/jinzhu/gorm"
-
 type Category struct {
-	gorm.Model
+	Model
 	Name     string         `form:"name" binding:"required" json:"name" gorm:"varchar(255);not null;default:'';comment:'分类名称'"` // 分类名称
 	Pid      int64          `form:"pid" json:"pid" gorm:"size:11;not null;default:0;comment:'分类节点'"`                            // 分类节点：0根节点
 	Icon     string         `form:"icon" json:"icon" gorm:"varchar(255);not null;default:'';comment:'分类图标'"`                    // 分类图标
@@ -22,7 +20,7 @@ func (Category) ToTree(data CategoryTrees) CategoryTrees {
 	TreeData := make(map[int64]*Category)
 	// 先重组数据：以数据的ID作为外层的key编号，以便下面进行子树的数据组合
 	for _, item := range data {
-		TreeData[int64(item.ID)] = item
+		TreeData[item.ID] = item
 	}
 	// 定义 RoleTrees 结构体
 	var TreeDataList CategoryTrees
