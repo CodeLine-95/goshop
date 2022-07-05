@@ -3,7 +3,6 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"goshop/config"
-	"goshop/model"
 	"goshop/utils"
 	"net/http"
 )
@@ -26,19 +25,8 @@ func CheckToken() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		//通过验证后获取claims中的userID
-		userId := claims.UserId
-		DB := config.GetDB()
-		var user model.Admin
-		DB.First(&user, userId)
-		//检查用户是否存在
-		if user.ID == 0 {
-			utils.Response(ctx, http.StatusUnauthorized, 401, "用户不存在", nil)
-			ctx.Abort()
-			return
-		}
 		//如果用户存在 将user信息存入上下文
-		ctx.Set("user", user)
+		ctx.Set("userID", claims.UserId)
 		ctx.Next()
 	}
 }

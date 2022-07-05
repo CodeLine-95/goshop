@@ -1,11 +1,7 @@
 package model
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 type Users struct {
-	gorm.Model
+	Model
 	UserID   string `sql:"index" gorm:"type:varchar(255);not null;unique"`                            // 用户唯一标识
 	Username string `form:"username" binding:"required" sql:"index" gorm:"type:varchar(20);not null"` // 用户名
 	Avatar   string `form:"avatar" gorm:"type:varchar(255);not null"`                                 // 头像
@@ -14,4 +10,10 @@ type Users struct {
 	Password string `form:"password" binding:"required" gorm:"size:255;not null"`                     // 密码
 	Loginip  string `gorm:"type:varchar(20);not null"`                                                // 登录IP
 	Email    string `form:"email" sql:"index" gorm:"size:255;not null"`                               // 邮箱
+}
+
+// 绑定手机号struct
+type BindPhone struct {
+	Phone  string `form:"phone" binding:"required"`
+	UserID string `form:"userID" binding:"required"`
 }

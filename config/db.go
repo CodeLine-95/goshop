@@ -37,6 +37,8 @@ func InitDB() *gorm.DB {
 	// db.SingularTable(true)            // 支持单数创建数据表
 	db.DB().SetMaxIdleConns(10)  // 用于设置闲置的连接数
 	db.DB().SetMaxOpenConns(100) // 用于设置最大打开的连接数，默认值为0表示不限制
+
+	db.LogMode(true)
 	DB = db
 	return db
 }

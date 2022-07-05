@@ -85,7 +85,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 生成token
-	token, tokenErr := config.ReleaseToken(user.ID)
+	token, tokenErr := config.ReleaseToken(user.UserID)
 	if tokenErr != nil {
 		utils.Fail(ctx, "生成token失败", nil)
 		return

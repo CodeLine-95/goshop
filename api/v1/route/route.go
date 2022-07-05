@@ -3,6 +3,7 @@ package route
 import (
 	"github.com/gin-gonic/gin"
 	"goshop/api/v1/controller"
+	"goshop/middleware"
 )
 
 func Routers(r *gin.Engine) {
@@ -17,9 +18,15 @@ func Routers(r *gin.Engine) {
 			authGroup.POST("/login", controller.Login)
 		}
 		// 分类
-		categoryGroup := v1.Group("/category")
+		categoryGroup := v1.Group("/category", middleware.CheckToken())
 		{
 			categoryGroup.GET("/get-lists", controller.GetCategoryLists)
+		}
+		// 用户
+		userGroup := v1.Group("/user", middleware.CheckToken())
+		{
+			userGroup.POST("/bind-phone", controller.UserBindPhone)
+			userGroup.POST("/un-bind-phone", controller.UnUserBindPhone)
 		}
 
 	}

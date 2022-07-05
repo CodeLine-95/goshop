@@ -10,12 +10,12 @@ import (
 var jwtKey = []byte(viper.GetString("server.jwtKey"))
 
 type Claims struct {
-	UserId uint
+	UserId string `json:"user_id"`
 	jwt.StandardClaims
 }
 
 // ReleaseToken 生成jwt token
-func ReleaseToken(userId uint) (string, error) {
+func ReleaseToken(userId string) (string, error) {
 	ip, _ := utils.ExternalIp()
 	expireTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{
