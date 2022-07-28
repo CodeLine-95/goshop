@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server celler server.",
+        "title": "GoShop 综合商城系统 API",
+        "termsOfService": "https://www.topgoer.com",
+        "contact": {
+            "name": "www.topgoer.com",
+            "url": "https://www.topgoer.com",
+            "email": "me@razeen.me"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:8080",
+    "basePath": "/app/v1",
+    "paths": {}
+}
