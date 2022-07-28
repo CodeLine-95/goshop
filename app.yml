@@ -9,10 +9,6 @@ captcha:
   w: 107
   h: 36
 
-logger:
-  name: goshop
-  path: log
-
 # mysql配置项
 db:
   driver: mysql
@@ -23,13 +19,3 @@ db:
   dbname: goshop
   charset: utf8mb4
   loc: Asia/Shanghai
-
-#db:
-#  driver: mysql
-#  host: 127.0.0.1
-#  port: 3306
-#  user: root
-#  pass: root
-#  dbname: goshop
-#  charset: utf8mb4
-#  loc: Asia/Shanghai
