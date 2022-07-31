@@ -20,8 +20,13 @@ func Routers(r *gin.Engine) {
 		// 分类
 		categoryGroup := v1.Group("/category", middleware.CheckToken())
 		{
-			categoryGroup.GET("/get-lists", controller.GetCategoryLists)
-			categoryGroup.GET("/get-goods-lists", controller.GetCategoryGoodsLists)
+			categoryGroup.GET("/lists", controller.GetCategoryLists)
+			categoryGroup.GET("/goods-lists", controller.GetCategoryGoodsLists)
+		}
+		// 商品
+		goodsGroup := v1.Group("/goods", middleware.CheckToken())
+		{
+			goodsGroup.GET("/detail", controller.GoodsDetails)
 		}
 		// 用户
 		userGroup := v1.Group("/user", middleware.CheckToken())

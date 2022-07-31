@@ -7,6 +7,7 @@ import (
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
+	"goshop/utils/Paginate"
 	"strconv"
 )
 
@@ -16,9 +17,9 @@ type ParamsRequest struct {
 }
 
 type GoodsParamsRequest struct {
-	CateId   int64 `form:"cateId" json:"cateId"`
-	Page     int64 `form:"page" json:"page"`
-	PageSize int64 `form:"pageSize" json:"pageSize"`
+	CateId   int64  `form:"cateId" json:"cateId"`
+	Page     string `form:"page" json:"page"`
+	PageSize string `form:"pageSize" json:"pageSize"`
 }
 
 // GetCategoryLists 获取分类列表
@@ -73,9 +74,9 @@ func GetCategoryGoodsLists(ctx *gin.Context) {
 		pidsString := pidsByte.String()
 		pidsString = pidsString[0 : len(pidsString)-2]
 		pidsString = pidsString[1:]
-		resErr = DB.Where("goods_cate in (?)", pidsString).Order("created_at desc").Find(&GoodsResult).Error
+		resErr = DB.Scopes(Paginate.Paginate(params.Page, params.PageSize)).Where("goods_cate in (?)", pidsString).Order("created_at desc").Find(&GoodsResult).Error
 	} else {
-		resErr = DB.Order("created_at desc").Find(&GoodsResult).Error
+		resErr = DB.Scopes(Paginate.Paginate(params.Page, params.PageSize)).Order("created_at desc").Find(&GoodsResult).Error
 	}
 
 	count := DB.Find(&model.Goods{}).RowsAffected
