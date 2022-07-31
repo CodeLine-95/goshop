@@ -1,5 +1,9 @@
 package model
 
+import (
+	"github.com/jinzhu/gorm"
+)
+
 type Category struct {
 	Model
 	Name     string         `form:"name" binding:"required" json:"name" gorm:"varchar(255);not null;default:'';comment:'分类名称'"` // 分类名称
@@ -50,4 +54,32 @@ func (Category) ToTree(data CategoryTrees) CategoryTrees {
 		}
 	}
 	return TreeDataList
+}
+
+// GetCategoryIds 获取指定分类下的所有子分类编号
+func (Category) GetCategoryIds(DB *gorm.DB, cateId int64) (pids map[int]int64) {
+	if cateId == 0 {
+		return
+	}
+	var Result []*Category
+	DB.Select([]string{"id", "pid"}).Find(&Result)
+	index := 0
+	pids = make(map[int]int64)
+	// 递归遍历指定分类下的全部子分类编号
+	var inPids func(Result []*Category, cateId int64)
+	inPids = func(Result []*Category, cateId int64) {
+		if Result == nil {
+			return
+		}
+		for _, item := range Result {
+			if item.Pid == cateId {
+				pids[index] = item.ID
+				index++
+				inPids(Result, item.ID)
+			}
+		}
+	}
+	// 初始化
+	inPids(Result, cateId)
+	return
 }

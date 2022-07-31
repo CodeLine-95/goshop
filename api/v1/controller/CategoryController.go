@@ -1,15 +1,24 @@
 package controller
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"goshop/config"
 	"goshop/model"
 	"goshop/utils"
+	"strconv"
 )
 
 type ParamsRequest struct {
 	Name string `form:"name" json:"name"`
 	Pid  int64  `form:"pid" json:"pid"` // pid 上级节点ID
+}
+
+type GoodsParamsRequest struct {
+	CateId   int64 `form:"cateId" json:"cateId"`
+	Page     int64 `form:"page" json:"page"`
+	PageSize int64 `form:"pageSize" json:"pageSize"`
 }
 
 // GetCategoryLists 获取分类列表
@@ -37,4 +46,47 @@ func GetCategoryLists(ctx *gin.Context) {
 		return
 	}
 	utils.Success(ctx, "获取成功", Result)
+}
+
+// GetCategoryGoodsLists 获取分类下的全部商品
+func GetCategoryGoodsLists(ctx *gin.Context) {
+	var params GoodsParamsRequest
+	if err := ctx.ShouldBind(&params); err != nil {
+		utils.Fail(ctx, "参数错误："+err.Error(), nil)
+		return
+	}
+
+	var cate model.Category
+	DB := config.GetDB()
+	pids := cate.GetCategoryIds(DB, params.CateId)
+
+	var GoodsResult []*model.Goods
+	var resErr error
+	if len(pids) > 0 {
+		pidsByte := new(bytes.Buffer)
+		for _, value := range pids {
+			_, err := fmt.Fprintf(pidsByte, "'%s',", strconv.FormatInt(value, 10))
+			if err != nil {
+				return
+			}
+		}
+		pidsString := pidsByte.String()
+		pidsString = pidsString[0 : len(pidsString)-2]
+		pidsString = pidsString[1:]
+		resErr = DB.Where("goods_cate in (?)", pidsString).Order("created_at desc").Find(&GoodsResult).Error
+	} else {
+		resErr = DB.Order("created_at desc").Find(&GoodsResult).Error
+	}
+
+	count := DB.Find(&model.Goods{}).RowsAffected
+
+	if resErr != nil {
+		utils.Fail(ctx, resErr.Error(), nil)
+		return
+	}
+	utils.Success(ctx, "获取成功", gin.H{
+		"count": count,
+		"data":  GoodsResult,
+	})
+
 }
